@@ -1,0 +1,53 @@
+<odoo>
+    <record id="view_tarea_form" model="ir.ui.view">
+        <field name="name">tarea.form</field>
+        <field name="model">mi_modulo_academico.tarea</field>
+        <field name="arch" type="xml">
+            <form string="Tarea">
+                <sheet>
+                    <group>
+                        <field name="unidad"/>
+                        <field name="tema"/>
+                        <field name="enlace"/>
+                        <field name="archivo" widget="binary" filename="archivo_nombre" />
+                        <field name="materia_id"/>
+                    </group>
+
+                    <!-- Subformulario para ver los envíos de tarea -->
+                    <group>
+                        <field name="envio_tarea_ids">
+                            <tree string="Envíos de Tarea">
+                                <field name="alumno_id"/>
+                                <field name="fecha_envio"/>
+                                <field name="estado"/>
+                                <field name="archivo_envio"/>
+                            </tree>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tarea_tree" model="ir.ui.view">
+        <field name="name">tarea.tree</field>
+        <field name="model">mi_modulo_academico.tarea</field>
+        <field name="arch" type="xml">
+            <tree string="Tareas">
+                <field name="unidad"/>
+                <field name="tema"/>
+                <field name="materia_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action para abrir el modelo Tarea -->
+    <record id="action_tarea" model="ir.actions.act_window">
+        <field name="name">Tareas</field>
+        <field name="res_model">mi_modulo_academico.tarea</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menú para el modelo Tarea -->
+    <menuitem id="menu_tarea" name="Tareas" parent="menu_mi_modulo_academico_root" action="action_tarea"/>
+</odoo>

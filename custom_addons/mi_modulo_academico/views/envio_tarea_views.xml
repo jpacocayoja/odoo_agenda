@@ -1,0 +1,44 @@
+<odoo>
+    <!-- Vista de formulario para EnvioTarea -->
+    <record id="view_envio_tarea_form" model="ir.ui.view">
+        <field name="name">envio.tarea.form</field>
+        <field name="model">mi_modulo_academico.envio_tarea</field>
+        <field name="arch" type="xml">
+            <form string="Envío de Tarea">
+                <sheet>
+                    <group>
+                        <!-- Relación con la tarea -->
+                        <field name="tarea_id" />
+                        <!-- Alumno que envía la tarea -->
+                        <field name="alumno_id"/>
+                        <field name="archivo_envio" widget="binary" filename="archivo_nombre" />
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vista de lista (tree) para EnvioTarea -->
+    <record id="view_envio_tarea_tree" model="ir.ui.view">
+        <field name="name">envio.tarea.tree</field>
+        <field name="model">mi_modulo_academico.envio_tarea</field>
+        <field name="arch" type="xml">
+            <tree string="Envíos de Tarea">
+                <field name="tarea_id"/>
+                <field name="alumno_id"/>
+                <field name="fecha_envio"/>
+                <field name="estado"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Acción para abrir el modelo EnvioTarea -->
+    <record id="action_envio_tarea" model="ir.actions.act_window">
+        <field name="name">Envíos de Tarea</field>
+        <field name="res_model">mi_modulo_academico.envio_tarea</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Menú para el modelo EnvioTarea -->
+    <menuitem id="menu_envio_tarea" name="Envíos de Tarea" parent="menu_mi_modulo_academico_root" action="action_envio_tarea"/>
+</odoo>
