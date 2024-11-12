@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Cursos de primaria -->
+        <record id="aula_1" model="mi_modulo_academico.aula">
+            <field name="name">aula 1</field>
+            <field name="numero">1</field>
+        </record>
+        <record id="aula_2" model="mi_modulo_academico.aula">
+            <field name="name">aula 2</field>
+            <field name="numero">2</field>
+        </record>
+        <record id="aula_3" model="mi_modulo_academico.aula">
+            <field name="name">aula 3</field>
+            <field name="numero">3</field>
+        </record>
+        <record id="aula_4" model="mi_modulo_academico.aula">
+            <field name="name">aula 4</field>
+            <field name="numero">4</field>
+        </record>
+        <record id="aula_5" model="mi_modulo_academico.aula">
+            <field name="name">aula 5</field>
+            <field name="numero">5</field>
+        </record>
+        <record id="aula_6" model="mi_modulo_academico.aula">
+            <field name="name">aula 6</field>
+            <field name="numero">6</field>
+        </record>
+        <record id="aula_7" model="mi_modulo_academico.aula">
+            <field name="name">aula 7</field>
+            <field name="numero">7</field>
+        </record>
+        <record id="aula_8" model="mi_modulo_academico.aula">
+            <field name="name">aula 8</field>
+            <field name="numero">8</field>
+        </record>
+        <record id="aula_9" model="mi_modulo_academico.aula">
+            <field name="name">aula 9</field>
+            <field name="numero">9</field>
+        </record>
+        <record id="aula_10" model="mi_modulo_academico.aula">
+            <field name="name">aula 10</field>
+            <field name="numero">10</field>
+        </record>
+        <record id="aula_11" model="mi_modulo_academico.aula">
+            <field name="name">aula 11</field>
+            <field name="numero">11</field>
+        </record>
+        <record id="aula_12" model="mi_modulo_academico.aula">
+            <field name="name">aula 12</field>
+            <field name="numero">12</field>
+        </record>
+        <record id="aula_13" model="mi_modulo_academico.aula">
+            <field name="name">aula 13</field>
+            <field name="numero">13</field>
+        </record>
+        <record id="aula_14" model="mi_modulo_academico.aula">
+            <field name="name">aula 14</field>
+            <field name="numero">14</field>
+        </record>
+        <record id="aula_15" model="mi_modulo_academico.aula">
+            <field name="name">aula 15</field>
+            <field name="numero">15</field>
+        </record>
+    </data>
+</odoo>

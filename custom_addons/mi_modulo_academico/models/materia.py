@@ -8,5 +8,5 @@ class Materia(models.Model):
     curso_id = fields.Many2one('mi_modulo_academico.curso', string='Curso', required=True)
     aula_id = fields.Many2one('mi_modulo_academico.aula', string='Aula', required=True)
     horario_id = fields.Many2one('mi_modulo_academico.horario', string='Horario', required=True)
-    profesor_id = fields.Many2one('res.partner', string='Profesor', required=True)
+    profesor_id = fields.Many2one('res.partner', string='Profesor', required=False)
     boletin_id = fields.Many2one('mi_modulo_academico.boletin_alumno', string='Boletín', required=False)

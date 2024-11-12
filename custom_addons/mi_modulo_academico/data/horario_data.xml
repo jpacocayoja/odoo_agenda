@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Horarios de mañana y tarde -->
+        <record id="horario_1" model="mi_modulo_academico.horario">
+            <field name="name">Mañana</field>
+            <field name="hora_inicio">8.00</field>
+            <field name="hora_fin">9.00</field>
+        </record>
+        <record id="horario_2" model="mi_modulo_academico.horario">
+            <field name="name">Tarde</field>
+            <field name="hora_inicio">14.00</field>
+            <field name="hora_fin">15.00</field>
+        </record>
+        <record id="horario_3" model="mi_modulo_academico.horario">
+            <field name="name">Mañana</field>
+            <field name="hora_inicio">9.00</field>
+            <field name="hora_fin">10.00</field>
+        </record>
+        <record id="horario_4" model="mi_modulo_academico.horario">
+            <field name="name">Tarde</field>
+            <field name="hora_inicio">15.00</field>
+            <field name="hora_fin">16.00</field>
+        </record>
+        <record id="horario_5" model="mi_modulo_academico.horario">
+            <field name="name">Mañana</field>
+            <field name="hora_inicio">10.00</field>
+            <field name="hora_fin">11.00</field>
+        </record>
+        <record id="horario_6" model="mi_modulo_academico.horario">
+            <field name="name">Tarde</field>
+            <field name="hora_inicio">16.00</field>
+            <field name="hora_fin">17.00</field>
+        </record>
+        <record id="horario_7" model="mi_modulo_academico.horario">
+            <field name="name">Mañana</field>
+            <field name="hora_inicio">8.00</field>
+            <field name="hora_fin">10.00</field>
+        </record>
+        <record id="horario_8" model="mi_modulo_academico.horario">
+            <field name="name">Tarde</field>
+            <field name="hora_inicio">13.00</field>
+            <field name="hora_fin">15.00</field>
+        </record>
+        <record id="horario_9" model="mi_modulo_academico.horario">
+            <field name="name">Mañana</field>
+            <field name="hora_inicio">11.00</field>
+            <field name="hora_fin">12.00</field>
+        </record>
+        <record id="horario_10" model="mi_modulo_academico.horario">
+            <field name="name">Tarde</field>
+            <field name="hora_inicio">17.00</field>
+            <field name="hora_fin">18.00</field>
+        </record>
+        <record id="horario_11" model="mi_modulo_academico.horario">
+            <field name="name">Mañana</field>
+            <field name="hora_inicio">7.00</field>
+            <field name="hora_fin">8.00</field>
+        </record>
+        <record id="horario_12" model="mi_modulo_academico.horario">
+            <field name="name">Tarde</field>
+            <field name="hora_inicio">18.00</field>
+            <field name="hora_fin">19.00</field>
+        </record>
+        <record id="horario_13" model="mi_modulo_academico.horario">
+            <field name="name">Mañana</field>
+            <field name="hora_inicio">9.00</field>
+            <field name="hora_fin">11.00</field>
+        </record>
+        <record id="horario_14" model="mi_modulo_academico.horario">
+            <field name="name">Tarde</field>
+            <field name="hora_inicio">12.00</field>
+            <field name="hora_fin">14.00</field>
+        </record>
+        <record id="horario_15" model="mi_modulo_academico.horario">
+            <field name="name">Mañana</field>
+            <field name="hora_inicio">10.00</field>
+            <field name="hora_fin">12.00</field>
+        </record>
+    </data>
+</odoo>

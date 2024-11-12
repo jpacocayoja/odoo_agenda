@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Cursos de primaria y secundaria -->
+        <record id="curso_1" model="mi_modulo_academico.curso">
+            <field name="name">Primero de Secundaria</field>
+            <field name="nivel">secundaria</field>
+            <field name="grado">1°</field>
+            <field name="turno">mañana</field>
+        </record>
+        <record id="curso_2" model="mi_modulo_academico.curso">
+            <field name="name">Segundo de Primaria</field>
+            <field name="nivel">primaria</field>
+            <field name="grado">2°</field>
+            <field name="turno">tarde</field>
+        </record>
+        <record id="curso_3" model="mi_modulo_academico.curso">
+            <field name="name">Tercero de Secundaria</field>
+            <field name="nivel">secundaria</field>
+            <field name="grado">3°</field>
+            <field name="turno">mañana</field>
+        </record>
+        <record id="curso_4" model="mi_modulo_academico.curso">
+            <field name="name">Cuarto de Primaria</field>
+            <field name="nivel">primaria</field>
+            <field name="grado">4°</field>
+            <field name="turno">tarde</field>
+        </record>
+        <record id="curso_5" model="mi_modulo_academico.curso">
+            <field name="name">Quinto de Secundaria</field>
+            <field name="nivel">secundaria</field>
+            <field name="grado">5°</field>
+            <field name="turno">mañana</field>
+        </record>
+        <record id="curso_6" model="mi_modulo_academico.curso">
+            <field name="name">Sexto de Primaria</field>
+            <field name="nivel">primaria</field>
+            <field name="grado">6°</field>
+            <field name="turno">tarde</field>
+        </record>
+        <record id="curso_7" model="mi_modulo_academico.curso">
+            <field name="name">Primero de Secundaria</field>
+            <field name="nivel">secundaria</field>
+            <field name="grado">1°</field>
+            <field name="turno">tarde</field>
+        </record>
+        <record id="curso_8" model="mi_modulo_academico.curso">
+            <field name="name">Segundo de Secundaria</field>
+            <field name="nivel">secundaria</field>
+            <field name="grado">2°</field>
+            <field name="turno">mañana</field>
+        </record>
+        <record id="curso_9" model="mi_modulo_academico.curso">
+            <field name="name">Tercero de Primaria</field>
+            <field name="nivel">primaria</field>
+            <field name="grado">3°</field>
+            <field name="turno">tarde</field>
+        </record>
+        <record id="curso_10" model="mi_modulo_academico.curso">
+            <field name="name">Cuarto de Secundaria</field>
+            <field name="nivel">secundaria</field>
+            <field name="grado">4°</field>
+            <field name="turno">mañana</field>
+        </record>
+        <record id="curso_11" model="mi_modulo_academico.curso">
+            <field name="name">Quinto de Primaria</field>
+            <field name="nivel">primaria</field>
+            <field name="grado">5°</field>
+            <field name="turno">tarde</field>
+        </record>
+        <record id="curso_12" model="mi_modulo_academico.curso">
+            <field name="name">Sexto de Secundaria</field>
+            <field name="nivel">secundaria</field>
+            <field name="grado">6°</field>
+            <field name="turno">mañana</field>
+        </record>
+        <record id="curso_13" model="mi_modulo_academico.curso">
+            <field name="name">Primero de Primaria</field>
+            <field name="nivel">primaria</field>
+            <field name="grado">1°</field>
+            <field name="turno">mañana</field>
+        </record>
+        <record id="curso_14" model="mi_modulo_academico.curso">
+            <field name="name">Segundo de Secundaria</field>
+            <field name="nivel">secundaria</field>
+            <field name="grado">2°</field>
+            <field name="turno">mañana</field>
+        </record>
+        <record id="curso_15" model="mi_modulo_academico.curso">
+            <field name="name">Tercero de Secundaria</field>
+            <field name="nivel">secundaria</field>
+            <field name="grado">3°</field>
+            <field name="turno">tarde</field>
+        </record>
+    </data>
+</odoo>

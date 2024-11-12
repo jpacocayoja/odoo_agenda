@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Materias relacionadas con los Cursos, Aulas y Horarios -->
+        <record id="materia_1" model="mi_modulo_academico.materia">
+            <field name="name">Matemáticas</field>
+            <field name="curso_id" ref="curso_1"/> <!-- Relación con Curso 1 -->
+            <field name="aula_id" ref="aula_1"/> <!-- Relación con Aula 1 -->
+            <field name="horario_id" ref="horario_1"/> <!-- Relación con Horario 1 -->
+        </record>
+        <record id="materia_2" model="mi_modulo_academico.materia">
+            <field name="name">Lengua Española</field>
+            <field name="curso_id" ref="curso_2"/> <!-- Relación con Curso 2 -->
+            <field name="aula_id" ref="aula_2"/> <!-- Relación con Aula 2 -->
+            <field name="horario_id" ref="horario_2"/> <!-- Relación con Horario 2 -->
+        </record>
+        <record id="materia_3" model="mi_modulo_academico.materia">
+            <field name="name">Ciencias Naturales</field>
+            <field name="curso_id" ref="curso_3"/> <!-- Relación con Curso 3 -->
+            <field name="aula_id" ref="aula_3"/> <!-- Relación con Aula 3 -->
+            <field name="horario_id" ref="horario_3"/> <!-- Relación con Horario 3 -->
+        </record>
+        <record id="materia_4" model="mi_modulo_academico.materia">
+            <field name="name">Historia</field>
+            <field name="curso_id" ref="curso_4"/> <!-- Relación con Curso 4 -->
+            <field name="aula_id" ref="aula_4"/> <!-- Relación con Aula 4 -->
+            <field name="horario_id" ref="horario_4"/> <!-- Relación con Horario 4 -->
+        </record>
+        <record id="materia_5" model="mi_modulo_academico.materia">
+            <field name="name">Geografía</field>
+            <field name="curso_id" ref="curso_5"/> <!-- Relación con Curso 5 -->
+            <field name="aula_id" ref="aula_5"/> <!-- Relación con Aula 5 -->
+            <field name="horario_id" ref="horario_5"/> <!-- Relación con Horario 5 -->
+        </record>
+        <record id="materia_6" model="mi_modulo_academico.materia">
+            <field name="name">Educación Física</field>
+            <field name="curso_id" ref="curso_6"/> <!-- Relación con Curso 6 -->
+            <field name="aula_id" ref="aula_6"/> <!-- Relación con Aula 6 -->
+            <field name="horario_id" ref="horario_6"/> <!-- Relación con Horario 6 -->
+        </record>
+        <record id="materia_7" model="mi_modulo_academico.materia">
+            <field name="name">Arte</field>
+            <field name="curso_id" ref="curso_7"/> <!-- Relación con Curso 7 -->
+            <field name="aula_id" ref="aula_7"/> <!-- Relación con Aula 7 -->
+            <field name="horario_id" ref="horario_7"/> <!-- Relación con Horario 7 -->
+        </record>
+        <record id="materia_8" model="mi_modulo_academico.materia">
+            <field name="name">Música</field>
+            <field name="curso_id" ref="curso_8"/> <!-- Relación con Curso 8 -->
+            <field name="aula_id" ref="aula_8"/> <!-- Relación con Aula 8 -->
+            <field name="horario_id" ref="horario_8"/> <!-- Relación con Horario 8 -->
+        </record>
+        <record id="materia_9" model="mi_modulo_academico.materia">
+            <field name="name">Filosofía</field>
+            <field name="curso_id" ref="curso_9"/> <!-- Relación con Curso 9 -->
+            <field name="aula_id" ref="aula_9"/> <!-- Relación con Aula 9 -->
+            <field name="horario_id" ref="horario_9"/> <!-- Relación con Horario 9 -->
+        </record>
+        <record id="materia_10" model="mi_modulo_academico.materia">
+            <field name="name">Química</field>
+            <field name="curso_id" ref="curso_10"/> <!-- Relación con Curso 10 -->
+            <field name="aula_id" ref="aula_10"/> <!-- Relación con Aula 10 -->
+            <field name="horario_id" ref="horario_10"/> <!-- Relación con Horario 10 -->
+        </record>
+    </data>
+</odoo>

@@ -10,6 +10,10 @@
     'data': [
         'security/mi_modulo_academico_security.xml',
         'security/ir.model.access.csv',
+        'data/aula_data.xml',
+        'data/curso_data.xml',
+        'data/horario_data.xml',
+        'data/materia_data.xml',
         'views/curso_views.xml',
         'views/aula_views.xml',
         'views/horario_views.xml',
