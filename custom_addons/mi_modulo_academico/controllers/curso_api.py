@@ -14,7 +14,6 @@ class CursoController(http.Controller):
                 'nivel': curso.nivel,
                 'grado': curso.grado,
                 'turno': curso.turno,
-                'comunicado_id': curso.comunicado_id.id if curso.comunicado_id else None
             } for curso in cursos]
             
             response = {
@@ -48,7 +47,6 @@ class CursoController(http.Controller):
                 'nivel': curso.nivel,
                 'grado': curso.grado,
                 'turno': curso.turno,
-                'comunicado_id': curso.comunicado_id.id if curso.comunicado_id else None
             }
             
             response = {
@@ -114,8 +112,7 @@ class CursoController(http.Controller):
                 'name': data['name'],
                 'nivel': data['nivel'],
                 'grado': data['grado'],
-                'turno': data['turno'],
-                'comunicado_id': data.get('comunicado_id', False)
+                'turno': data['turno']
             })
 
             # Respuesta de éxito
@@ -170,8 +167,7 @@ class CursoController(http.Controller):
                     'name': curso.name,
                     'nivel': curso.nivel,
                     'grado': curso.grado,
-                    'turno': curso.turno,
-                    'comunicado_id': curso.comunicado_id.id if curso.comunicado_id else None
+                    'turno': curso.turno
                 }
             }
             return http.Response(json.dumps(response), content_type='application/json')

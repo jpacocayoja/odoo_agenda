@@ -17,19 +17,10 @@ class ComunicadoController(http.Controller):
                     'enlace': comunicado.enlace,
                     'archivo': comunicado.archivo.decode('utf-8') if comunicado.archivo else None,
                     'archivo_nombre': comunicado.archivo_nombre,
-                    'alumno_id': {
-                        'id': comunicado.alumno_id.id,
-                        'name': comunicado.alumno_id.name
-                    } if comunicado.alumno_id else None,
-                    'curso_ids': [
-                        {
-                            'id': curso.id,
-                            'name': curso.name,
-                            'nivel': curso.nivel,
-                            'grado': curso.grado,
-                            'turno': curso.turno
-                        } for curso in comunicado.curso_ids
-                    ]
+                    'persona_id': {
+                        'id': comunicado.persona_id.id,
+                        'name': comunicado.persona_id.name
+                    } if comunicado.persona_id else None
                 }
                 comunicados_data.append(comunicado_data)
 
@@ -65,19 +56,10 @@ class ComunicadoController(http.Controller):
                 'enlace': comunicado.enlace,
                 'archivo': comunicado.archivo.decode('utf-8') if comunicado.archivo else None,
                 'archivo_nombre': comunicado.archivo_nombre,
-                'alumno_id': {
-                    'id': comunicado.alumno_id.id,
-                    'name': comunicado.alumno_id.name
-                } if comunicado.alumno_id else None,
-                'curso_ids': [
-                    {
-                        'id': curso.id,
-                        'name': curso.name,
-                        'nivel': curso.nivel,
-                        'grado': curso.grado,
-                        'turno': curso.turno
-                    } for curso in comunicado.curso_ids
-                ]
+                'persona_id': {
+                    'id': comunicado.persona_id.id,
+                    'name': comunicado.persona_id.name
+                } if comunicado.persona_id else None
             }
 
             response = {
@@ -93,8 +75,7 @@ class ComunicadoController(http.Controller):
             }
             return http.Response(json.dumps(response), status=500, content_type='application/json')
 
-
-     # Eliminar un comunicado por ID (DELETE - DELETE)
+    # Eliminar un comunicado por ID (DELETE - DELETE)
     @http.route('/api/comunicados/<int:comunicado_id>', type='http', auth='public', methods=['DELETE'])
     def delete_comunicado(self, comunicado_id):
         try:
@@ -105,7 +86,7 @@ class ComunicadoController(http.Controller):
                     "message": "Comunicado no encontrado"
                 }
                 return http.Response(json.dumps(response), status=404, content_type='application/json')
-            
+
             # Eliminar el comunicado
             comunicado.unlink()
 
@@ -120,16 +101,6 @@ class ComunicadoController(http.Controller):
                 "message": str(e)
             }
             return http.Response(json.dumps(response), status=500, content_type='application/json')
-  
-  # PARA LOS type='json' SE DEBE PONER ESTA CABECERA DESDE EL CLIENTE
-#{
-#   "jsonrpc": "2.0",
-#   "id": null,
-#   "method": "call",
-#   "params": {
-#        // Aquí van los datos del comunicado
-#    }
-#}      
 
     # Crear un nuevo comunicado (CREATE - POST)
     @http.route('/api/comunicados', type='json', auth='public', methods=['POST'])
@@ -142,9 +113,17 @@ class ComunicadoController(http.Controller):
                 'enlace': kwargs.get('enlace'),
                 'archivo': kwargs.get('archivo'),
                 'archivo_nombre': kwargs.get('archivo_nombre'),
-                'alumno_id': kwargs.get('alumno_id'),  # Se asume que se recibe el ID del alumno
-                'curso_ids': [(6, 0, kwargs.get('curso_ids', []))]  # Se asume que se recibe una lista de IDs de cursos
+                'persona_id': kwargs.get('persona_id'),  # ID de la persona asociada al comunicado
             })
+
+            # Si tiene persona_id, crear una notificación
+            if comunicado.persona_id:
+                request.env['mi_modulo_academico.notificacion'].create({
+                    'estado': False,  # Estado inicial de la notificación
+                    'comunicado_id': comunicado.id,
+                    'persona_id': comunicado.persona_id.id,
+                    'persona_nombre': comunicado.persona_id.name
+                })
 
             response = {
                 "status": "success",
@@ -162,7 +141,6 @@ class ComunicadoController(http.Controller):
             }
             return http.Response(json.dumps(response), status=500, content_type='application/json')
 
-        
     # Actualizar un comunicado por ID (UPDATE - PUT)
     @http.route('/api/comunicados/<int:comunicado_id>', type='json', auth='public', methods=['PUT'])
     def update_comunicado(self, comunicado_id, **kwargs):
@@ -174,7 +152,7 @@ class ComunicadoController(http.Controller):
                     "message": "Comunicado no encontrado"
                 }
                 return http.Response(json.dumps(response), status=404, content_type='application/json')
-            
+
             # Actualizar los campos del comunicado
             comunicado.write(kwargs)
 
@@ -193,8 +171,3 @@ class ComunicadoController(http.Controller):
                 "message": str(e)
             }
             return http.Response(json.dumps(response), status=500, content_type='application/json')
-
-   
-
-    
-

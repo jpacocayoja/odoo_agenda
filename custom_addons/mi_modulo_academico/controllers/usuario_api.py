@@ -22,7 +22,7 @@ class UsuarioController(http.Controller):
             return {
                 'status': 'success',
                 'message': 'Autenticación exitosa',
-                'usuario_id': usuario.partner_id.id,
+                'persona_id': usuario.partner_id.id,
                 'nombre': usuario.partner_id.name,
                 'rol': usuario.rol
             }

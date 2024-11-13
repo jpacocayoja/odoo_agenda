@@ -1,4 +1,4 @@
-from odoo import models, fields
+from odoo import models, fields, api
 
 class Comunicado(models.Model):
     _name = 'mi_modulo_academico.comunicado'
@@ -9,9 +9,24 @@ class Comunicado(models.Model):
     enlace = fields.Char(string='Enlace URL')  # Campo para almacenar un enlace URL
     archivo = fields.Binary(string='Archivo Adjunto')  # Campo para subir archivos
     archivo_nombre = fields.Char(string="Nombre del Archivo")  # Nombre del archivo
-    alumno_id = fields.Many2one('res.partner', string='Alumno')
-    curso_ids = fields.One2many('mi_modulo_academico.curso', 'comunicado_id', string='Cursos')
-    
+    persona_id = fields.Many2one('res.partner', string='Persona')  # Persona asociada al comunicado
+
+    @api.model
+    def create(self, vals):
+        # Crear el registro del comunicado
+        comunicado = super(Comunicado, self).create(vals)
+        
+        # Verificar que el comunicado tiene un `persona_id` para crear la notificación
+        if comunicado.persona_id:
+            # Crear el registro de notificación relacionado
+            self.env['mi_modulo_academico.notificacion'].create({
+                'estado': False,  # Estado inicial de la notificación
+                'comunicado_id': comunicado.id,
+                'persona_id': comunicado.persona_id.id,  # ID de la persona
+                'persona_nombre': comunicado.persona_id.name  # Nombre de la persona
+            })
+        
+        return comunicado
 
 
 

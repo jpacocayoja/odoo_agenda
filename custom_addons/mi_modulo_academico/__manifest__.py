@@ -31,6 +31,7 @@
         'views/tarea_views.xml',
         'views/envio_tarea_views.xml',
         'views/usuario_views.xml',
+        'views/notificacion_views.xml',
     ],
     'installable': True,
     'application': True,

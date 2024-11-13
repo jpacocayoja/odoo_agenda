@@ -11,8 +11,8 @@
                         <field name="descripcion" widget="textarea"/>
                         <field name="enlace" />
                         <field name="archivo" widget="binary" filename="archivo_nombre" />
-                        <field name="alumno_id" />
-                        <field name="curso_ids" />
+                        <field name="persona_id" />
+                       
                     </group>
                 </sheet>
             </form>

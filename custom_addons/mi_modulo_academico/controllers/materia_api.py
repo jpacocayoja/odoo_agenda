@@ -117,6 +117,57 @@ class MateriaController(http.Controller):
             }
             return http.Response(json.dumps(response), status=500, content_type='application/json')
 
+    # Crear una nueva materia (CREATE - POST)
+    @http.route('/api/materias', type='json', auth='public', methods=['POST'])
+    def create_materia(self, **post):
+        try:
+            # Los datos ya vienen parseados en 'post'
+            data = post
+
+            if not data:
+                return {
+                    "status": "error",
+                    "message": "No se recibieron datos JSON válidos."
+                }
+
+            # Validamos que los campos requeridos estén presentes
+            required_fields = ['name', 'curso_id', 'aula_id', 'horario_id']
+            for field in required_fields:
+                if field not in data:
+                    return {
+                        "status": "error",
+                        "message": f"El campo {field} es requerido"
+                    }
+
+            # Validación de datos específicos como el 'curso_id', 'aula_id', y 'horario_id'
+            if not isinstance(data['curso_id'], int) or not isinstance(data['aula_id'], int) or not isinstance(data['horario_id'], int):
+                return {
+                    "status": "error",
+                    "message": "Los campos curso_id, aula_id y horario_id deben ser enteros."
+                }
+
+            # Crear la nueva materia en la base de datos
+            materia = request.env['mi_modulo_academico.materia'].sudo().create({
+                'name': data['name'],
+                'curso_id': data['curso_id'],
+                'aula_id': data['aula_id'],
+                'horario_id': data['horario_id'],
+                'profesor_id': data.get('profesor_id'),  # Este campo es opcional
+                'boletin_id': data.get('boletin_id'),    # Este campo también es opcional
+            })
+
+            # Respuesta de éxito
+            return {
+                "status": "success",
+                "message": "Materia creada exitosamente",
+            }
+
+        except Exception as e:
+            return {
+                "status": "error",
+                "message": str(e)
+            }
+
     # Actualizar una materia por ID (UPDATE - PUT)
     @http.route('/api/materias/<int:materia_id>', type='json', auth='public', methods=['PUT'])
     def update_materia(self, materia_id, **kwargs):
@@ -147,6 +198,8 @@ class MateriaController(http.Controller):
                 "message": str(e)
             }
             return http.Response(json.dumps(response), status=500, content_type='application/json')
+        
+    
 
     # Eliminar una materia por ID (DELETE - DELETE)
     @http.route('/api/materias/<int:materia_id>', type='http', auth='public', methods=['DELETE'])
