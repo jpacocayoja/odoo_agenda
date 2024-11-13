@@ -30,6 +30,7 @@
         'views/padre_views.xml',
         'views/tarea_views.xml',
         'views/envio_tarea_views.xml',
+        'views/usuario_views.xml',
     ],
     'installable': True,
     'application': True,

@@ -14,3 +14,5 @@ from . import asistencia
 from . import padre
 from . import tarea
 from . import envio_tarea
+from . import usuario
+from . import notificacion

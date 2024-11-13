@@ -1,0 +1,42 @@
+<odoo>
+    <!-- Definición de la vista formulario para Usuario -->
+    <record id="view_usuario_form" model="ir.ui.view">
+        <field name="name">usuario.form</field>
+        <field name="model">mi_modulo_academico.usuario</field>
+        <field name="arch" type="xml">
+            <form string="Usuario">
+                <sheet>
+                    <group>
+                        <field name="email"/>
+                        <field name="password" password="True"/> <!-- Campo de contraseña enmascarado -->
+                        <field name="rol"/>
+                        <field name="partner_id"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Definición de la vista árbol para Usuario -->
+    <record id="view_usuario_tree" model="ir.ui.view">
+        <field name="name">usuario.tree</field>
+        <field name="model">mi_modulo_academico.usuario</field>
+        <field name="arch" type="xml">
+            <tree string="Usuarios">
+                <field name="email"/>
+                <field name="rol"/>
+                <field name="partner_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Definición de la acción de ventana para Usuario -->
+    <record id="action_usuario" model="ir.actions.act_window">
+        <field name="name">Usuarios</field>
+        <field name="res_model">mi_modulo_academico.usuario</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Definición del menú para Usuario -->
+    <menuitem id="menu_usuario" name="Usuarios" parent="menu_mi_modulo_academico_root" action="action_usuario" sequence="30"/>
+</odoo>

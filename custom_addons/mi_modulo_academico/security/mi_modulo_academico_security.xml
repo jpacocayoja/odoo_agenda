@@ -90,4 +90,15 @@
         <field name="perm_create" eval="False" />
         <field name="perm_unlink" eval="False" />
     </record>
+
+    <record id="mi_modulo_academico_usuario_rule" model="ir.model.access">
+        <field name="name">mi_modulo_academico.usuario access</field>
+        <field name="model_id" ref="model_mi_modulo_academico_usuario" />
+        <field name="group_id" ref="mi_modulo_academico.group_mimodulo_academico_user" />
+        <field name="perm_read" eval="1" />
+        <field name="perm_write" eval="1" />
+        <field name="perm_create" eval="1" />
+        <field name="perm_unlink" eval="1" />
+    </record>
+    
 </odoo>

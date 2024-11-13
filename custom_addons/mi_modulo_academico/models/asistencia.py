@@ -6,4 +6,4 @@ class Asistencia(models.Model):
 
     fecha = fields.Date(string='Fecha', required=True)
     alumno_id = fields.Many2one('res.partner', string='Alumno', required=True)
-    profesor_id = fields.Many2one('mi_modulo_academico.profesor', string='Profesor', required=True)
+    profesor_id = fields.Many2one('res.partner', string='Profesor', required=True)

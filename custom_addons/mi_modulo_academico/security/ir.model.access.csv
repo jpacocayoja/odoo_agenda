@@ -16,3 +16,4 @@ access_padre,access_padre,model_mi_modulo_academico_padre,,1,1,1,1
 access_tarea,access_tarea,model_mi_modulo_academico_tarea,,1,1,1,1
 access_envio_tarea,access_envio_tarea,model_mi_modulo_academico_envio_tarea,,1,1,1,1
 access_res_partner_public,access_res_partner_public,base.model_res_partner,,1,1,1,1
+access_usuario,access_usuario,model_mi_modulo_academico_usuario,,1,1,1,1
