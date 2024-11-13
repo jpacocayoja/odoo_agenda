@@ -6,13 +6,24 @@
         <field name="arch" type="xml">
             <form string="Comunicado">
                 <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="titulo" placeholder="Título del comunicado"/>
+                        </h1>
+                    </div>
                     <group>
-                        <field name="titulo" />
-                        <field name="descripcion" widget="textarea"/>
-                        <field name="enlace" />
-                        <field name="archivo" widget="binary" filename="archivo_nombre" />
-                        <field name="persona_id" />
-                       
+                        <group>
+                            <field name="descripcion" widget="html"/>
+                            <field name="enlace" widget="url"/>
+                            <field name="persona_id" />
+                        </group>
+                        <group>
+                            <field name="archivo" widget="binary" filename="archivo_nombre" />
+                            <field name="archivo_nombre" invisible="1"/>
+                            <!-- <div t-if="record.archivo_url.value">
+                                <field name="archivo_url" widget="url" string="Ver archivo en Cloudinary"/>
+                            </div> -->
+                        </group>
                     </group>
                 </sheet>
             </form>
@@ -24,11 +35,36 @@
         <field name="name">comunicado.tree</field>
         <field name="model">mi_modulo_academico.comunicado</field>
         <field name="arch" type="xml">
-            <tree string="Comunicado">
+            <tree string="Comunicado" decoration-info="archivo_url">
                 <field name="titulo" />
                 <field name="descripcion" />
                 <field name="archivo_nombre" />
+                <field name="archivo_url" widget="url" string="Archivo en Cloudinary"/>
+                <field name="persona_id" />
             </tree>
+        </field>
+    </record>
+
+    <!-- Vista de búsqueda para el modelo Comunicado -->
+    <record id="view_comunicado_search" model="ir.ui.view">
+        <field name="name">comunicado.search</field>
+        <field name="model">mi_modulo_academico.comunicado</field>
+        <field name="arch" type="xml">
+            <search string="Buscar Comunicados">
+                <field name="titulo"/>
+                <field name="descripcion"/>
+                <field name="persona_id"/>
+                <filter string="Con Archivo" name="con_archivo" 
+                        domain="[('archivo_url', '!=', False)]"/>
+                <filter string="Sin Archivo" name="sin_archivo" 
+                        domain="[('archivo_url', '=', False)]"/>
+                <group expand="0" string="Agrupar Por">
+                    <filter name="group_by_persona" string="Persona" 
+                            context="{'group_by': 'persona_id'}"/>
+                    <filter name="group_by_month" string="Mes" 
+                            context="{'group_by': 'create_date:month'}"/>
+                </group>
+            </search>
         </field>
     </record>
 
@@ -37,9 +73,21 @@
         <field name="name">Comunicados</field>
         <field name="res_model">mi_modulo_academico.comunicado</field>
         <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_comunicado_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crea tu primer comunicado
+            </p>
+            <p>
+                Crea comunicados y comparte archivos a través de Cloudinary.
+            </p>
+        </field>
     </record>
 
     <!-- Menú para acceder a los comunicados -->
-    <menuitem id="menu_comunicado" name="Comunicados" parent="menu_mi_modulo_academico_root"
-        action="action_comunicado" sequence="80" />
+    <menuitem id="menu_comunicado" 
+              name="Comunicados" 
+              parent="menu_mi_modulo_academico_root"
+              action="action_comunicado" 
+              sequence="80" />
 </odoo>

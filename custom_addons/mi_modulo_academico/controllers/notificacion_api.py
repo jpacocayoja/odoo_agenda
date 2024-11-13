@@ -16,7 +16,7 @@ class NotificacionController(http.Controller):
                 'id': notificacion.id,
                 'estado': notificacion.estado,
                 'persona_nombre': notificacion.persona_nombre,
-                'comunicado_id': notificacion.comunicado_id.id,      
+                'comunicado_id': notificacion.comunicado_id,      
                 'persona_id': notificacion.persona_id,
             } for notificacion in notificaciones]
             
