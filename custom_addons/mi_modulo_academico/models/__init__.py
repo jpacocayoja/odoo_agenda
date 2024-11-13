@@ -16,3 +16,4 @@ from . import tarea
 from . import envio_tarea
 from . import usuario
 from . import notificacion
+from . import token
