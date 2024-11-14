@@ -2,9 +2,10 @@
 
 ## Tutorial
 [Instalacion Odoo Docker Video Tutorial](https://drive.google.com/file/d/1Se09Hlqdow9lOM6ZA3-DI5tDw01w1U0_/view?usp=sharing)
+(https://drive.google.com/file/d/1Y43fVXeGLUYXJ4IKWyNRiVycTY2D-3Wy/view?usp=sharing).
 
 ## App Movil
-[Aplicacion Movil De Vistas](https://github.com/marquito020/movil-odoo.git)
+[Aplicacion Movil](https://github.com/marquito020/academic-app)
 
 ## Descripción
 
@@ -34,6 +35,7 @@ El Módulo de Gestión Académica está diseñado para administrar diversas func
 
 ### Comunicación
 - Publicación de noticias, eventos y avisos importantes para la comunidad escolar.
+- Notificacion a los padres y alumnos de comunicados
 
 ### Gestión Administrativa
 - Registro de asistencia de estudiantes y profesores.
@@ -41,6 +43,10 @@ El Módulo de Gestión Académica está diseñado para administrar diversas func
 ### Finanzas y Facturación
 - Gestión de pagos de matrículas y mensualidades.
 - Administración de tarifas y estados de cuenta de los estudiantes.
+
+### Tareas
+- Envio de tareas.
+- Revision de tareas.
 
 ## Integración con otros módulos
 
@@ -68,6 +74,7 @@ Se integra con el módulo de contabilidad para administrar los pagos, generar fa
 - **Comunicado**: Publicación de comunicados y avisos.
 - **Asistencia**: Registro de asistencia de estudiantes y profesores.
 - **Padre**: Gestión de información de padres y asociación con alumnos (hijos).
+- **Tarea**: Gestión de tareas.
 
 ### Vistas
 
@@ -99,9 +106,9 @@ docker-compose up --build
 
 ## Integrantes
 
-- **Ochoa Llusco Ever Cristian**
+- **Paco Cayoja Juan Gabriel**
 - **Toledo Canna Marco David**
-- **Yanma Villarroel Yossy Carmelita**
+- **Vargas Avila Marcelo**
 
 ## Licencia
 
