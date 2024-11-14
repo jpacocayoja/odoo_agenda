@@ -6,7 +6,7 @@
     'author': 'Tu Nombre',
     'website': 'http://www.tusitio.com',
     'category': 'Education',
-    'depends': ['base', 'crm', 'account', 'web'],
+    'depends': ['base', 'crm', 'account', 'web', 'mail'],
     'data': [
         'security/mi_modulo_academico_security.xml',
         'security/ir.model.access.csv',
@@ -32,7 +32,15 @@
         'views/envio_tarea_views.xml',
         'views/usuario_views.xml',
         'views/notificacion_views.xml',
+        'views/alumno_views.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            '/mi_modulo_academico/static/src/js/audio_recorder.js',
+            '/mi_modulo_academico/static/src/scss/audio_recorder.scss',
+            '/mi_modulo_academico/static/src/xml/audio_recorder.xml',
+        ],
+    },
     'installable': True,
     'application': True,
     'auto_install': False,

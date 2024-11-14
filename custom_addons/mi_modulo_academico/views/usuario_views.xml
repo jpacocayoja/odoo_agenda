@@ -1,42 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Definición de la vista formulario para Usuario -->
+    <!-- Vista formulario para Usuario -->
     <record id="view_usuario_form" model="ir.ui.view">
         <field name="name">usuario.form</field>
         <field name="model">mi_modulo_academico.usuario</field>
         <field name="arch" type="xml">
             <form string="Usuario">
                 <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="display_name" readonly="1" placeholder="Nombre completo"/>
+                        </h1>
+                    </div>
                     <group>
-                        <field name="email"/>
-                        <field name="password" password="True"/> <!-- Campo de contraseña enmascarado -->
-                        <field name="rol"/>
-                        <field name="partner_id"/>
+                        <group>
+                            <field name="partner_id" 
+                                   options="{'no_create': True, 'no_open': True}"
+                                   domain="[('type', '=', 'contact')]"/>
+                            <field name="email" widget="email"/>
+                            <field name="password" password="True" required="1"/>
+                            <field name="rol"/>
+                        </group>
+                        <group>
+                            <field name="odoo_user_id" readonly="1" invisible="rol not in ['profesor', 'estudiante']"/>
+                        </group>
                     </group>
+                    <div class="oe_clear"/>
+                    <div class="alert alert-info" role="alert" invisible="rol not in ['profesor', 'estudiante']">
+                        <p><strong>Nota:</strong> Este usuario tendrá acceso al sistema web de Odoo.</p>
+                    </div>
                 </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" groups="base.group_user"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
             </form>
         </field>
     </record>
 
-    <!-- Definición de la vista árbol para Usuario -->
+    <!-- Vista árbol para Usuario -->
     <record id="view_usuario_tree" model="ir.ui.view">
         <field name="name">usuario.tree</field>
         <field name="model">mi_modulo_academico.usuario</field>
         <field name="arch" type="xml">
-            <tree string="Usuarios">
+            <tree string="Usuarios" decoration-info="rol=='estudiante'" decoration-success="rol=='profesor'" decoration-warning="rol=='padre'">
+                <field name="display_name"/>
                 <field name="email"/>
                 <field name="rol"/>
                 <field name="partner_id"/>
+                <field name="odoo_user_id" optional="show"/>
             </tree>
         </field>
     </record>
 
-    <!-- Definición de la acción de ventana para Usuario -->
+    <!-- Vista de búsqueda para Usuario -->
+    <record id="view_usuario_search" model="ir.ui.view">
+        <field name="name">usuario.search</field>
+        <field name="model">mi_modulo_academico.usuario</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="partner_id"/>
+                <field name="email"/>
+                <field name="rol"/>
+                <filter string="Profesores" name="profesores" domain="[('rol', '=', 'profesor')]"/>
+                <filter string="Estudiantes" name="estudiantes" domain="[('rol', '=', 'estudiante')]"/>
+                <filter string="Padres" name="padres" domain="[('rol', '=', 'padre')]"/>
+                <group expand="0" string="Agrupar Por">
+                    <filter name="group_by_rol" string="Rol" context="{'group_by': 'rol'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Acción de ventana para Usuario -->
     <record id="action_usuario" model="ir.actions.act_window">
         <field name="name">Usuarios</field>
         <field name="res_model">mi_modulo_academico.usuario</field>
         <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_usuario_search"/>
+        <field name="context">{'search_default_group_by_rol': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                ¡Crea tu primer usuario!
+            </p>
+            <p>
+                Crea usuarios para profesores, estudiantes y padres para gestionar el acceso al sistema.
+            </p>
+        </field>
     </record>
 
-    <!-- Definición del menú para Usuario -->
-    <menuitem id="menu_usuario" name="Usuarios" parent="menu_mi_modulo_academico_root" action="action_usuario" sequence="30"/>
+    <!-- Menú para Usuario -->
+    <menuitem id="menu_usuario" 
+              name="Usuarios" 
+              parent="menu_mi_modulo_academico_root" 
+              action="action_usuario" 
+              sequence="30"/>
 </odoo>

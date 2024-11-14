@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="mi_modulo_academico.AudioRecorderField" owl="1">
+        <div class="o_field_audio_recorder" t-att-class="{ 'o_field_readonly': props.readonly }">
+            <div class="d-flex align-items-center">
+                <!-- Controles de grabación -->
+                <t t-if="!props.readonly">
+                    <button t-if="!state.isRecording and !state.audioURL" 
+                            class="btn btn-primary me-2"
+                            t-on-click="() => this.startRecording()">
+                        <i class="fa fa-microphone"/> Grabar
+                    </button>
+                    
+                    <button t-if="state.isRecording"
+                            class="btn btn-danger me-2"
+                            t-on-click="() => this.stopRecording()">
+                        <i class="fa fa-stop"/> Detener
+                    </button>
+                </t>
+
+                <!-- Reproductor de audio -->
+                <t t-if="state.audioURL">
+                    <audio controls="true" t-att-src="state.audioURL" class="me-2"/>
+                    <button t-if="!props.readonly"
+                            class="btn btn-danger"
+                            t-on-click="() => this.deleteRecording()">
+                        <i class="fa fa-trash"/> Eliminar
+                    </button>
+                </t>
+            </div>
+
+            <!-- Indicador de grabación -->
+            <div t-if="state.isRecording" class="text-danger mt-2">
+                <i class="fa fa-circle blink"/> Grabando...
+            </div>
+        </div>
+    </t>
+</templates>

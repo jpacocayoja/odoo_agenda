@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista de formulario para estudiantes -->
+       <record id="view_alumno_form" model="ir.ui.view">
+        <field name="name">estudiante.alumno.form</field>
+        <field name="model">mi_modulo_academico.estudiante</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="partner_id" placeholder="Seleccione un estudiante..." 
+                                   options="{'no_create': True}"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="usuario_id" options="{'no_create': True}" 
+                                   domain="[('rol', '=', 'estudiante')]"/>
+                            <field name="curso_id"/>
+                            <field name="materia_ids" widget="many2many_tags"/>
+                        </group>
+                        <group>
+                            <field name="profesor_asignado_ids" widget="many2many_tags"
+                                   domain="[('rol', '=', 'profesor')]"
+                                   options="{'no_create': True}"
+                                   placeholder="Seleccione los profesores..."/>
+                            <field name="profesor_ids" widget="many2many_tags" readonly="1"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <!-- Tabla informativa de profesores y materias -->
+                    <notebook>
+                        <page string="Información de Profesores">
+                            <field name="profesor_ids" mode="tree" readonly="1">
+                                <tree>
+                                    <field name="partner_id"/>
+                                    <field name="email"/>
+                                    <field name="rol" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vista de árbol para estudiantes -->
+   <record id="view_alumno_tree" model="ir.ui.view">
+        <field name="name">estudiante.alumno.tree</field>
+        <field name="model">mi_modulo_academico.estudiante</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="partner_id"/>
+                <field name="usuario_id"/>
+                <field name="curso_id"/>
+                <field name="materia_ids" widget="many2many_tags"/>
+                <field name="profesor_asignado_ids" widget="many2many_tags"/>
+                <field name="profesor_ids" widget="many2many_tags"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Vista de búsqueda para estudiantes -->
+       <record id="view_alumno_search" model="ir.ui.view">
+        <field name="name">estudiante.alumno.search</field>
+        <field name="model">mi_modulo_academico.estudiante</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="partner_id"/>
+                <field name="curso_id"/>
+                <field name="materia_ids"/>
+                <field name="profesor_asignado_ids"/>
+                <filter string="Mis Estudiantes" name="mis_estudiantes" 
+                        domain="['|', ('profesor_ids.partner_id', '=', uid), 
+                                    ('profesor_asignado_ids.partner_id', '=', uid)]"/>
+                <separator/>
+                <filter string="Activos" name="active" domain="[('active', '=', True)]"/>
+                <filter string="Inactivos" name="inactive" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Agrupar Por">
+                    <filter string="Curso" name="group_by_curso" 
+                            context="{'group_by': 'curso_id'}"/>
+                    <filter string="Materias" name="group_by_materia" 
+                            context="{'group_by': 'materia_ids'}"/>
+                    <filter string="Profesores" name="group_by_profesor" 
+                            context="{'group_by': 'profesor_asignado_ids'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Acción para ver estudiantes -->
+    <record id="action_ver_alumnos" model="ir.actions.act_window">
+        <field name="name">Estudiantes</field>
+        <field name="res_model">mi_modulo_academico.estudiante</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No hay estudiantes registrados
+            </p>
+            <p>
+                Cree un nuevo estudiante para comenzar.
+            </p>
+        </field>
+    </record>
+
+    <!-- Regla de registro para acceso a estudiantes -->
+    <record id="rule_estudiantes_profesor" model="ir.rule">
+        <field name="name">Profesores ven solo sus estudiantes</field>
+        <field name="model_id" ref="model_mi_modulo_academico_estudiante"/>
+        <field name="domain_force">[('profesor_ids.partner_id', '=', user.partner_id.id)]</field>
+        <field name="groups" eval="[(4, ref('mi_modulo_academico.group_profesor'))]"/>
+    </record>
+
+    <!-- Menú para estudiantes -->
+    <menuitem id="menu_ver_alumnos"
+              name="Estudiantes"
+              parent="menu_mi_modulo_academico_root"
+              action="action_ver_alumnos"
+              sequence="25"/>
+</odoo>

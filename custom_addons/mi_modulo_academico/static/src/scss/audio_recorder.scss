@@ -1,0 +1,25 @@
+.o_field_audio_recorder {
+  padding: 8px;
+  border-radius: 4px;
+  background-color: #f8f9fa;
+
+  &.o_field_readonly {
+    padding: 0;
+    background-color: transparent;
+  }
+
+  audio {
+    height: 36px;
+    max-width: 250px;
+  }
+
+  .blink {
+    animation: blink 1s infinite;
+  }
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
+}

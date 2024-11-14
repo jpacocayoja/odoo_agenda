@@ -17,3 +17,5 @@ from . import envio_tarea
 from . import usuario
 from . import notificacion
 from . import token
+from . import estudiante  
+from . import comunicado_tracking

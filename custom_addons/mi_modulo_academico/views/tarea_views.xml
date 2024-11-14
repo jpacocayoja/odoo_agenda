@@ -5,25 +5,36 @@
         <field name="arch" type="xml">
             <form string="Tarea">
                 <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="title" placeholder="Título de la tarea"/>
+                        </h1>
+                    </div>
                     <group>
-                        <field name="unidad"/>
-                        <field name="tema"/>
-                        <field name="enlace"/>
-                        <field name="archivo" widget="binary" filename="archivo_nombre" />
-                        <field name="materia_id"/>
+                        <group>
+                            <field name="unidad"/>
+                            <field name="materia_id" options="{'no_create': True}"/>
+                            <field name="tema"/>
+                        </group>
+                        <group>
+                            <field name="enlace" widget="url"/>
+                            <field name="archivo" widget="binary" filename="archivo_nombre"/>
+                            <field name="archivo_nombre" invisible="1"/>
+                        </group>
                     </group>
 
-                    <!-- Subformulario para ver los envíos de tarea -->
-                    <group>
-                        <field name="envio_tarea_ids">
-                            <tree string="Envíos de Tarea">
-                                <field name="alumno_id"/>
-                                <field name="fecha_envio"/>
-                                <field name="estado"/>
-                                <field name="archivo_envio"/>
-                            </tree>
-                        </field>
-                    </group>
+                    <notebook>
+                        <page string="Envíos de Tarea">
+                            <field name="envio_tarea_ids">
+                                <tree string="Envíos de Tarea">
+                                    <field name="alumno_id"/>
+                                    <field name="fecha_envio"/>
+                                    <field name="estado"/>
+                                    <field name="archivo_envio" filename="archivo_nombre"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
@@ -34,10 +45,28 @@
         <field name="model">mi_modulo_academico.tarea</field>
         <field name="arch" type="xml">
             <tree string="Tareas">
+                <field name="title"/>
                 <field name="unidad"/>
                 <field name="tema"/>
                 <field name="materia_id"/>
             </tree>
+        </field>
+    </record>
+
+    <record id="view_tarea_search" model="ir.ui.view">
+        <field name="name">tarea.search</field>
+        <field name="model">mi_modulo_academico.tarea</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="title"/>
+                <field name="unidad"/>
+                <field name="tema"/>
+                <field name="materia_id"/>
+                <group expand="0" string="Agrupar Por">
+                    <filter string="Materia" name="group_by_materia" context="{'group_by': 'materia_id'}"/>
+                    <filter string="Unidad" name="group_by_unidad" context="{'group_by': 'unidad'}"/>
+                </group>
+            </search>
         </field>
     </record>
 
@@ -46,8 +75,19 @@
         <field name="name">Tareas</field>
         <field name="res_model">mi_modulo_academico.tarea</field>
         <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crear primera tarea
+            </p>
+            <p>
+                Crea tareas para asignar a los estudiantes.
+            </p>
+        </field>
     </record>
 
     <!-- Menú para el modelo Tarea -->
-    <menuitem id="menu_tarea" name="Tareas" parent="menu_mi_modulo_academico_root" action="action_tarea"/>
+    <menuitem id="menu_tarea" 
+              name="Tareas" 
+              parent="menu_mi_modulo_academico_root" 
+              action="action_tarea"/>
 </odoo>

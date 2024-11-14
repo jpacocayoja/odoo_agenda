@@ -1,80 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!-- Vista de formulario para el modelo Comunicado -->
-    <record id="view_comunicado_form" model="ir.ui.view">
+     <record id="view_comunicado_form" model="ir.ui.view">
         <field name="name">comunicado.form</field>
         <field name="model">mi_modulo_academico.comunicado</field>
         <field name="arch" type="xml">
-            <form string="Comunicado">
+            <form>
+                <header>
+                    <field name="state" widget="statusbar"/>
+                    <button name="action_publish" string="Publicar" type="object" 
+                            invisible="state != 'draft'"
+                            class="oe_highlight"/>
+                    <button name="action_archive" string="Archivar" type="object"
+                            invisible="state != 'published'"
+                            class="oe_highlight"/>
+                    <button name="action_draft" string="Volver a Borrador" type="object"
+                            invisible="state == 'draft'"/>
+                </header>
                 <sheet>
                     <div class="oe_title">
                         <h1>
-                            <field name="titulo" placeholder="Título del comunicado" />
+                            <field name="titulo" placeholder="Título del comunicado"/>
                         </h1>
                     </div>
                     <group>
                         <group>
-                            <field name="descripcion" />
-                            <field name="enlace" widget="url" />
-                            <field name="persona_id" />
+                            <field name="descripcion"/>
+                            <field name="enlace" widget="url"/>
+                            <field name="tipo_destinatario"/>
+                            <field name="curso_id" 
+                                   invisible="tipo_destinatario != 'curso'"
+                                   required="tipo_destinatario == 'curso'"/>
+                            <field name="materia_id" 
+                                   invisible="tipo_destinatario != 'materia'"
+                                   required="tipo_destinatario == 'materia'"/>
+                            <field name="padre_id" 
+                                   invisible="tipo_destinatario != 'padre'"
+                                   required="tipo_destinatario == 'padre'"/>
+                            <field name="enviar_padres" 
+                                   invisible="tipo_destinatario == 'padre'"
+                                   help="Marque esta casilla si desea que el comunicado sea enviado también a los padres de los estudiantes"/>
                         </group>
                         <group>
-                            <field name="archivo" widget="binary" filename="archivo_nombre" />
-                            <field name="archivo_nombre" invisible="1" />
-                            <!-- <div t-if="record.archivo_url.value">
-                                <field name="archivo_url" widget="url" string="Ver archivo en Cloudinary"/>
-                            </div> -->
+                            <!-- Sección de archivos -->
+                            <field name="archivo" widget="binary" filename="archivo_nombre"/>
+                            <field name="archivo_nombre" invisible="1"/>
+                            <field name="archivo_url" widget="url" 
+                                   string="⬇️ Click para descargar archivo"
+                                   invisible="not archivo_url"/>
+                            
+                            <!-- Nueva sección de audio -->
+                            <label for="audio" string="Mensaje de Voz"/>
+                            <div class="o_row">
+                                <field name="audio" widget="audio_recorder"/>
+                                <field name="audio_nombre" invisible="1"/>
+                            </div>
+                            <field name="audio_url" widget="url" 
+                                   string="🔊 Reproducir mensaje"
+                                   invisible="not audio_url"/>
                         </group>
                     </group>
+                    <notebook>
+                        <page string="Seguimiento de Lectura" name="tracking">
+                            <group>
+                                <group>
+                                    <field name="total_destinatarios"/>
+                                    <field name="total_leidos"/>
+                                    <field name="porcentaje_lectura" widget="percentage"/>
+                                </group>
+                            </group>
+                            <field name="tracking_ids" readonly="1">
+                                <tree>
+                                    <field name="persona_id"/>
+                                    <field name="tipo_destinatario"/>
+                                    <field name="leido"/>
+                                    <field name="fecha_lectura"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
                 </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
             </form>
         </field>
     </record>
-
-    <!-- Vista de lista para el modelo Comunicado -->
+    
+    
+    <!-- Vista de lista actualizada -->
     <record id="view_comunicado_tree" model="ir.ui.view">
         <field name="name">comunicado.tree</field>
         <field name="model">mi_modulo_academico.comunicado</field>
         <field name="arch" type="xml">
-            <tree string="Comunicado" decoration-info="archivo_url">
-                <field name="titulo" />
-                <!--   <field name="descripcion" widget="html"/> -->
-                <field name="persona_id" />
-                <field name="archivo_nombre" />
-                <field name="archivo_url" widget="url" string="Archivo enlace" />
-
+            <tree>
+                <field name="create_date"/>
+                <field name="titulo"/>
+                <field name="tipo_destinatario"/>
+                <field name="curso_id"/>
+                <field name="materia_id"/>
+                <field name="padre_id"/>
+                <field name="archivo_nombre"/>
+                <field name="state"/>
+                <field name="archivo_url" widget="url" string="⬇️ Enlace" invisible="not archivo_url"/>
             </tree>
         </field>
     </record>
 
-    <!-- Vista de búsqueda para el modelo Comunicado -->
+    <!-- Vista de búsqueda actualizada -->
     <record id="view_comunicado_search" model="ir.ui.view">
         <field name="name">comunicado.search</field>
         <field name="model">mi_modulo_academico.comunicado</field>
         <field name="arch" type="xml">
-            <search string="Buscar Comunicados">
-                <field name="titulo" />
-                <field name="descripcion" />
-                <field name="persona_id" />
-                <filter string="Con Archivo" name="con_archivo"
-                    domain="[('archivo_url', '!=', False)]" />
-                <filter string="Sin Archivo" name="sin_archivo"
-                    domain="[('archivo_url', '=', False)]" />
+            <search>
+                <field name="titulo"/>
+                <field name="descripcion"/>
+                <field name="tipo_destinatario"/>
+                <field name="curso_id"/>
+                <field name="materia_id"/>
+                <field name="padre_id"/>
+                <filter string="Con Archivo" name="con_archivo" domain="[('archivo_url', '!=', False)]"/>
+                <filter string="Sin Archivo" name="sin_archivo" domain="[('archivo_url', '=', False)]"/>
+                <separator/>
+                <filter string="Borrador" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="Publicado" name="published" domain="[('state', '=', 'published')]"/>
+                <filter string="Archivado" name="archived" domain="[('state', '=', 'archived')]"/>
                 <group expand="0" string="Agrupar Por">
-                    <filter name="group_by_persona" string="Persona"
-                        context="{'group_by': 'persona_id'}" />
-                    <filter name="group_by_month" string="Mes"
-                        context="{'group_by': 'create_date:month'}" />
+                    <filter name="group_by_tipo" string="Tipo de Destinatario" context="{'group_by': 'tipo_destinatario'}"/>
+                    <filter name="group_by_curso" string="Curso" context="{'group_by': 'curso_id'}"/>
+                    <filter name="group_by_materia" string="Materia" context="{'group_by': 'materia_id'}"/>
+                    <filter name="group_by_state" string="Estado" context="{'group_by': 'state'}"/>
+                    <filter name="group_by_month" string="Mes" context="{'group_by': 'create_date:month'}"/>
                 </group>
             </search>
         </field>
     </record>
 
-    <!-- Acción para abrir la vista de los comunicados -->
+    <!-- Acción de ventana -->
     <record id="action_comunicado" model="ir.actions.act_window">
         <field name="name">Comunicados</field>
         <field name="res_model">mi_modulo_academico.comunicado</field>
         <field name="view_mode">tree,form</field>
-        <field name="search_view_id" ref="view_comunicado_search" />
+        <field name="search_view_id" ref="view_comunicado_search"/>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
                 Crea tu primer comunicado
@@ -85,10 +154,10 @@
         </field>
     </record>
 
-    <!-- Menú para acceder a los comunicados -->
-    <menuitem id="menu_comunicado"
-        name="Comunicados"
-        parent="menu_mi_modulo_academico_root"
-        action="action_comunicado"
-        sequence="80" />
+    <!-- Menú -->
+    <menuitem id="menu_comunicado" 
+              name="Comunicados" 
+              parent="menu_mi_modulo_academico_root" 
+              action="action_comunicado" 
+              sequence="80"/>
 </odoo>

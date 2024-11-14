@@ -18,4 +18,6 @@ access_envio_tarea,access_envio_tarea,model_mi_modulo_academico_envio_tarea,,1,1
 access_res_partner_public,access_res_partner_public,base.model_res_partner,,1,1,1,1
 access_usuario,access_usuario,model_mi_modulo_academico_usuario,,1,1,1,1
 access_notificacion,access_notificacion,model_mi_modulo_academico_notificacion,,1,1,1,1
-
+access_estudiante_user,mi_modulo_academico.estudiante.user,model_mi_modulo_academico_estudiante,base.group_user,1,1,1,1
+access_comunicado_tracking_user,comunicado.tracking.user,model_mi_modulo_academico_comunicado_tracking,base.group_user,1,1,1,1
+access_comunicado_tracking_portal,comunicado.tracking.portal,model_mi_modulo_academico_comunicado_tracking,base.group_portal,1,1,1,0

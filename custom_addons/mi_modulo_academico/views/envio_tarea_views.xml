@@ -1,44 +1,116 @@
+<!-- views/envio_tarea_views.xml -->
 <odoo>
-    <!-- Vista de formulario para EnvioTarea -->
-    <record id="view_envio_tarea_form" model="ir.ui.view">
+    <!-- Vista form para revisar tareas -->
+      <record id="view_envio_tarea_form" model="ir.ui.view">
         <field name="name">envio.tarea.form</field>
         <field name="model">mi_modulo_academico.envio_tarea</field>
         <field name="arch" type="xml">
-            <form string="Envío de Tarea">
+            <form string="Revisar Tarea">
+                <header>
+                    <button name="verificar_tarea" 
+                            string="Analizar con IA" 
+                            type="object" 
+                            class="oe_highlight"
+                            confirm="¿Desea realizar el análisis de plagio y uso de IA en esta tarea?"/>
+                    <field name="estado" widget="statusbar"/>
+                </header>
                 <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="alumno_id" 
+                                   options="{'no_create': True, 'no_create_edit': True}"
+                                   context="{'default_is_company': False}"/>
+                        </h1>
+                    </div>
                     <group>
-                        <!-- Relación con la tarea -->
-                        <field name="tarea_id" />
-                        <!-- Alumno que envía la tarea -->
-                        <field name="alumno_id"/>
-                        <field name="archivo_envio" widget="binary" filename="archivo_nombre" />
+                        <group>
+                            <field name="tarea_id" 
+                                   options="{'no_create': True, 'no_quick_create': True}"
+                                   domain="[]"/>
+                            <field name="fecha_envio"/>
+                            <field name="archivo_envio" widget="binary" filename="archivo_nombre"/>
+                            <field name="archivo_nombre" invisible="1"/>
+                            <field name="es_prueba"/>
+                        </group>
                     </group>
+                    <notebook invisible="not texto_extraido">
+                        <page string="Resultados del Análisis">
+                            <group>
+                                <group string="Resultados">
+                                    <field name="probabilidad_plagio" widget="percentpie"/>
+                                    <field name="probabilidad_ia" widget="percentpie"/>
+                                </group>
+                                <group string="Detalles">
+                                    <field name="texto_extraido"/>
+                                    <field name="detalles_plagio"/>
+                                    <field name="resultado_analisis"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
                 </sheet>
             </form>
         </field>
     </record>
 
-    <!-- Vista de lista (tree) para EnvioTarea -->
     <record id="view_envio_tarea_tree" model="ir.ui.view">
         <field name="name">envio.tarea.tree</field>
         <field name="model">mi_modulo_academico.envio_tarea</field>
         <field name="arch" type="xml">
-            <tree string="Envíos de Tarea">
+            <tree>
                 <field name="tarea_id"/>
                 <field name="alumno_id"/>
                 <field name="fecha_envio"/>
-                <field name="estado"/>
+                <field name="estado" decoration-success="estado == 'revisado'" 
+                       decoration-info="estado == 'pendiente'"
+                       decoration-danger="estado == 'plagio'"/>
+                <field name="probabilidad_plagio" invisible="estado == 'pendiente'"/>
+                <field name="probabilidad_ia" invisible="estado == 'pendiente'"/>
+                <field name="es_prueba"/>
             </tree>
         </field>
     </record>
-
-    <!-- Acción para abrir el modelo EnvioTarea -->
-    <record id="action_envio_tarea" model="ir.actions.act_window">
-        <field name="name">Envíos de Tarea</field>
-        <field name="res_model">mi_modulo_academico.envio_tarea</field>
-        <field name="view_mode">tree,form</field>
+    <!-- Vista de búsqueda -->
+    <record id="view_envio_tarea_search" model="ir.ui.view">
+        <field name="name">envio.tarea.search</field>
+        <field name="model">mi_modulo_academico.envio_tarea</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="alumno_id"/>
+                <field name="tarea_id"/>
+                <filter string="Envíos de Prueba" name="pruebas" domain="[('es_prueba', '=', True)]"/>
+                <filter string="Envíos Reales" name="reales" domain="[('es_prueba', '=', False)]"/>
+                <filter string="Posible Plagio" name="plagio" domain="[('estado', '=', 'plagio')]"/>
+                <filter string="Pendientes" name="pendientes" domain="[('estado', '=', 'pendiente')]"/>
+                <group expand="0" string="Agrupar Por">
+                    <filter name="group_by_tarea" string="Tarea" context="{'group_by': 'tarea_id'}"/>
+                    <filter name="group_by_alumno" string="Alumno" context="{'group_by': 'alumno_id'}"/>
+                    <filter name="group_by_estado" string="Estado" context="{'group_by': 'estado'}"/>
+                </group>
+            </search>
+        </field>
     </record>
 
-    <!-- Menú para el modelo EnvioTarea -->
-    <menuitem id="menu_envio_tarea" name="Envíos de Tarea" parent="menu_mi_modulo_academico_root" action="action_envio_tarea"/>
+    <!-- Action para abrir las tareas -->
+    <record id="action_envio_tarea" model="ir.actions.act_window">
+        <field name="name">Revisar Tareas</field>
+        <field name="res_model">mi_modulo_academico.envio_tarea</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_reales': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No hay tareas enviadas aún
+            </p>
+            <p>
+                Puede crear un envío de prueba para probar el análisis de IA.
+            </p>
+        </field>
+    </record>
+
+    <!-- Menú para acceder a las tareas -->
+    <menuitem id="menu_envio_tarea" 
+              name="Revisar Tareas" 
+              parent="menu_mi_modulo_academico_root" 
+              action="action_envio_tarea"
+              sequence="10"/>
 </odoo>
