@@ -62,6 +62,7 @@ setup(
         'xlsxwriter',
         'xlwt',
         'zeep',
+        'firebase-admin',
     ],
     python_requires='>=3.10',
     extras_require={
