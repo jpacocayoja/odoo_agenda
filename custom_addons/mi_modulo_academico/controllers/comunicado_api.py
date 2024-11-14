@@ -171,3 +171,47 @@ class ComunicadoController(http.Controller):
                 "message": str(e)
             }
             return http.Response(json.dumps(response), status=500, content_type='application/json')
+
+    # Obtener comunicados por persona_id (READ - GET)
+    @http.route('/api/comunicados/persona/<int:persona_id>', type='http', auth='public', methods=['GET'])
+    def get_comunicados_por_persona(self, persona_id):
+        try:
+            comunicados = request.env['mi_modulo_academico.comunicado'].sudo().search([('persona_id', '=', persona_id)])
+
+            # Verificar si hay comunicados para la persona
+            if not comunicados:
+                response = {
+                    "status": "error",
+                    "message": "No se encontraron comunicados para esta persona"
+                }
+                return http.Response(json.dumps(response), status=404, content_type='application/json')
+
+            # Formatear los datos de los comunicados
+            comunicados_data = [
+                {
+                    'id': comunicado.id,
+                    'titulo': comunicado.titulo,
+                    'descripcion': comunicado.descripcion,
+                    'enlace': comunicado.enlace,
+                    'archivo_url': comunicado.archivo_url,
+                    'archivo_nombre': comunicado.archivo_nombre,
+                    'persona_id': {
+                        'id': comunicado.persona_id.id,
+                        'name': comunicado.persona_id.name
+                    } if comunicado.persona_id else None
+                }
+                for comunicado in comunicados
+            ]
+
+            response = {
+                "status": "success",
+                "message": "Comunicados obtenidos exitosamente",
+                "data": comunicados_data
+            }
+            return http.Response(json.dumps(response), content_type='application/json')
+        except Exception as e:
+            response = {
+                "status": "error",
+                "message": str(e)
+            }
+            return http.Response(json.dumps(response), status=500, content_type='application/json')

@@ -3,28 +3,64 @@ from odoo.exceptions import UserError
 from datetime import datetime
 import requests
 import base64
-import time
 import hashlib
 import logging
 import pytz
+import firebase_admin
+from firebase_admin import credentials, messaging
+import os
 
 _logger = logging.getLogger(__name__)
 
+# Inicialización de constantes de Cloudinary
 class CloudinaryConstants:
-    """Constantes para la configuración de Cloudinary"""
     API_KEY = '629354311966981'
     API_SECRET = '_4o1x-VtJVU11MjdPuiQyImtSm4'
     CLOUD_NAME = 'da8obisjx'
     FOLDER = 'odoo'
     RESOURCE_TYPE = 'raw'
 
+# Inicialización de Firebase
+firebase_initialized = False
+
+def initialize_firebase():
+    global firebase_initialized
+    if not firebase_initialized:
+        dir_path = os.path.dirname(os.path.abspath(__file__))
+        firebase_credential_path = os.path.join(dir_path, 'firebase.json')
+        cred = credentials.Certificate(firebase_credential_path)
+        firebase_admin.initialize_app(cred)
+        firebase_initialized = True
+
+def send_push_notification(tokens, title, body):
+    """Envía una notificación push a través de Firebase"""
+    _logger.info(f"Sending push notification: {title} - {body}")
+    _logger.info(f"Tokens: {tokens}")
+    try:
+        initialize_firebase()
+        message = messaging.MulticastMessage(
+            tokens=tokens,
+            notification=messaging.Notification(title=title, body=body)
+        )
+        responses = messaging.send_each_for_multicast(message)
+
+        # Logueo de éxito y fallos por token
+        for idx, response in enumerate(responses.responses):
+            if response.success:
+                _logger.info(f"Push notification sent to token[{idx}] successfully.")
+            else:
+                _logger.error(f"Failed to send notification to token[{idx}]: {response.exception}")
+
+    except Exception as e:
+        _logger.error(f"Error sending push notification: {str(e)}")
+        raise UserError(f"Error sending push notification: {str(e)}")
+
 class Comunicado(models.Model):
     _name = 'mi_modulo_academico.comunicado'
     _description = 'Comunicado'
-    _inherit = ['mail.thread', 'mail.activity.mixin']  # Añadido para seguimiento
-    _order = 'create_date desc'  # Ordenar por fecha de creación
+    _inherit = ['mail.thread', 'mail.activity.mixin']
+    _order = 'create_date desc'
 
-    # Campos básicos
     titulo = fields.Char(string='Título', required=True, tracking=True)
     descripcion = fields.Text(string='Descripción', required=True, tracking=True)
     enlace = fields.Char(string='Enlace URL', tracking=True)
@@ -32,29 +68,21 @@ class Comunicado(models.Model):
     archivo_nombre = fields.Char(string="Nombre del Archivo")
     archivo_url = fields.Char(string="URL del archivo en Cloudinary", readonly=True)
     persona_id = fields.Many2one('res.partner', string='Persona', tracking=True)
-    
-    # Campos adicionales para seguimiento
     active = fields.Boolean(default=True, string='Activo')
     state = fields.Selection([
         ('draft', 'Borrador'),
         ('published', 'Publicado'),
         ('archived', 'Archivado')
     ], string='Estado', default='draft', tracking=True)
-    
-    # Campos de fechas
     create_date = fields.Datetime(string='Fecha de Creación', readonly=True)
     write_date = fields.Datetime(string='Última Modificación', readonly=True)
 
     def _get_signature(self, params_to_sign):
-        """Genera la firma para la autenticación con Cloudinary"""
+        """Genera la firma para Cloudinary"""
         try:
-            # Ordenar los parámetros alfabéticamente
             params = sorted(params_to_sign.items())
-            # Formar la cadena con los parámetros
             message = '&'.join([f'{k}={v}' for k, v in params])
-            # Agregar el API_SECRET al final de la cadena
             to_sign = message + CloudinaryConstants.API_SECRET
-            # Generar el hash SHA1
             signature = hashlib.sha1(to_sign.encode('utf-8')).hexdigest()
             return signature
         except Exception as e:
@@ -62,58 +90,27 @@ class Comunicado(models.Model):
             raise UserError(f"Error al generar la firma: {str(e)}")
 
     def _upload_to_cloudinary(self, file_data, file_name):
-        """Subir archivo a Cloudinary usando requests"""
+        """Sube el archivo a Cloudinary usando requests"""
         try:
-            # Generar timestamp
-             # Definir la zona horaria de Nueva York
             tz = pytz.timezone('America/New_York')
-            # Obtener el tiempo actual en la zona horaria de Nueva York
-            ny_time = datetime.now(tz)
-            # Convertir a timestamp UNIX
-            timestamp = int(ny_time.timestamp())
-            
-            # Preparar parámetros para la firma
-            params = {
-                'folder': CloudinaryConstants.FOLDER,
-                'timestamp': timestamp,
-                #'api_key': CloudinaryConstants.API_KEY,
-                
-            }
-            
-            # Generar firma
+            timestamp = int(datetime.now(tz).timestamp())
+            params = {'folder': CloudinaryConstants.FOLDER, 'timestamp': timestamp}
             signature = self._get_signature(params)
-
-            # URL de subida de Cloudinary
             upload_url = f'https://api.cloudinary.com/v1_1/{CloudinaryConstants.CLOUD_NAME}/{CloudinaryConstants.RESOURCE_TYPE}/upload'
-
-            # Decodificar el archivo de base64
             file_bytes = base64.b64decode(file_data)
-
-            # Preparar datos para la solicitud
             data = {
                 'api_key': CloudinaryConstants.API_KEY,
                 'timestamp': timestamp,
                 'signature': signature,
                 'folder': CloudinaryConstants.FOLDER,
             }
-
-            # Preparar el archivo para la subida
-            files = {
-                'file': (file_name, file_bytes)
-            }
-            
-            # Realizar la solicitud POST
+            files = {'file': (file_name, file_bytes)}
             response = requests.post(upload_url, data=data, files=files)
-
-            # Verificar la respuesta
             if response.status_code != 200:
                 _logger.error(f"Error en la respuesta de Cloudinary: {response.text}")
                 raise UserError(f'Error al subir archivo: {response.text}')
-
-            # Procesar la respuesta
             result = response.json()
             return result.get('secure_url')
-
         except requests.exceptions.RequestException as e:
             _logger.error(f"Error de conexión con Cloudinary: {str(e)}")
             raise UserError(f"Error de conexión con Cloudinary: {str(e)}")
@@ -123,9 +120,8 @@ class Comunicado(models.Model):
 
     @api.model
     def create(self, vals):
-        """Sobrescribir método create para manejar la subida de archivos"""
+        """Sobrescribir método create para manejar la subida de archivos y notificación push"""
         try:
-            # Subir el archivo si existe
             if vals.get('archivo'):
                 cloudinary_url = self._upload_to_cloudinary(
                     vals['archivo'],
@@ -133,10 +129,8 @@ class Comunicado(models.Model):
                 )
                 vals['archivo_url'] = cloudinary_url
 
-            # Crear el registro de comunicado
             comunicado = super(Comunicado, self).create(vals)
 
-            # Crear notificación si hay persona asociada
             if comunicado.persona_id:
                 self.env['mi_modulo_academico.notificacion'].create({
                     'estado': False,
@@ -144,6 +138,18 @@ class Comunicado(models.Model):
                     'persona_id': comunicado.persona_id.id,
                     'persona_nombre': comunicado.persona_id.name
                 })
+
+                # Obtener tokens asociados a la persona
+                tokens = self.env['mi_modulo_academico.token'].sudo().search([
+                    ('persona_id', '=', comunicado.persona_id.id)
+                ]).mapped('token')
+
+                if tokens:
+                    send_push_notification(
+                        tokens=tokens,
+                        title=comunicado.titulo,
+                        body=comunicado.descripcion
+                    )
 
             return comunicado
 
@@ -154,31 +160,26 @@ class Comunicado(models.Model):
     def write(self, vals):
         """Sobrescribir método write para manejar la actualización de archivos"""
         try:
-            # Subir el archivo si se actualiza
             if vals.get('archivo'):
                 cloudinary_url = self._upload_to_cloudinary(
                     vals['archivo'],
                     vals.get('archivo_nombre', self.archivo_nombre or 'unnamed')
                 )
                 vals['archivo_url'] = cloudinary_url
-
             return super(Comunicado, self).write(vals)
-
         except Exception as e:
             _logger.error(f"Error al actualizar comunicado: {str(e)}")
             raise UserError(f"Error al actualizar comunicado: {str(e)}")
 
     def unlink(self):
-        """Sobrescribir método unlink para manejo seguro de eliminación"""
+        """Método unlink para eliminar comunicados"""
         for record in self:
-            # Aquí podrías agregar lógica para eliminar el archivo de Cloudinary si es necesario
             try:
                 return super(Comunicado, self).unlink()
             except Exception as e:
                 _logger.error(f"Error al eliminar comunicado: {str(e)}")
                 raise UserError(f"Error al eliminar comunicado: {str(e)}")
 
-    # Métodos para cambios de estado
     def action_publish(self):
         """Publicar el comunicado"""
         return self.write({'state': 'published'})

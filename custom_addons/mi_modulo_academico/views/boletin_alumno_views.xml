@@ -9,9 +9,11 @@
                         <field name="alumno_id"/>
                         <field name="curso_id"/>
                         <field name="profesor_id"/>
-                        <field name="materia_ids">
+                        <!-- Campo materia_ids que muestra las materias del curso -->
+                        <field name="materia_ids" readonly="1">
                             <tree string="Materias">
                                 <field name="name"/>
+                                <field name="profesor_id"/>
                             </tree>
                         </field>
                         <field name="nota_ids">

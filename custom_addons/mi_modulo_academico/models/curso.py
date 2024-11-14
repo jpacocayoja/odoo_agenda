@@ -8,3 +8,6 @@ class Curso(models.Model):
     nivel = fields.Selection([('primaria', 'Primaria'), ('secundaria', 'Secundaria')], string='Nivel', required=True)
     grado = fields.Char(string='Grado', required=True)
     turno = fields.Selection([('mañana', 'Mañana'), ('tarde', 'Tarde')], string='Turno', required=True)
+
+    # Relación con Materia
+    materia_ids = fields.One2many('mi_modulo_academico.materia', 'curso_id', string='Materias')
