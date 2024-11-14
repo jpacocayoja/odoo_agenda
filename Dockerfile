@@ -11,10 +11,16 @@ RUN mkdir -p /mnt/extra-addons
 # Copia los addons personalizados en el directorio de la imagen y cambia los permisos en el proceso
 COPY --chown=odoo:odoo ./custom_addons /mnt/extra-addons
 
+# Cambia temporalmente al usuario root para instalar las dependencias
+USER root
+
 # Instala la dependencia firebase-admin
 RUN apt-get update && \
     apt-get install -y python3-pip && \
     pip3 install firebase-admin
+
+# Vuelve al usuario odoo
+USER odoo
 
 # Expone el puerto 8069
 EXPOSE 8069
